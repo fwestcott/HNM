@@ -1,0 +1,53 @@
+---
+title: "qPCR Summary"
+author: "Felix Westcott"
+date: "2022-07-28"
+output: html_document
+---
+
+```{r setup, include=MediaLSE}
+library(tidyverse)
+library(ggplot2)
+library(readxl)
+library(xlsx)
+library(dplyr)
+library(ggpubr)
+library(ggsci)
+library(rstatix)
+library (cowplot)
+
+qPCR_summary <- read_excel("HNM qPCR Summary.xlsx", sheet = 2)
+
+qPCR_summary$"Condition" <- factor(qPCR_summary$"Condition", levels = c("LPS Control",	"Low Insulin Control", "Low Insulin OPLA", "Low Insulin POLA", "High Insulin Control", "High Insulin OPLA", "High Insulin POLA"))
+
+```
+
+
+``` {r Graphs}
+
+ggbarplot(qPCR_summary, x = "Condition", "NFKB1",
+       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "NFKB1") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 2)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 16),
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/NFKB1.png')
+
+```
+
+
+``` {R Stats}
+
+for (i in 5:ncol(qPCR_summary)) {
+   formula <- as.formula(paste(colnames(qPCR_summary)[i], " ~ Condition*Round", sep=""))
+   model <- aov(formula, data = qPCR_summary)
+
+   cat("\n-----\n\n")
+   cat(colnames(qPCR_summary)[i])
+   cat("\n")
+   print(summary(model))
+}
+```
