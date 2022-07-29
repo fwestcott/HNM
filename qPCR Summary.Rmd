@@ -36,12 +36,34 @@ axis.title.y = element_text(color = "grey20", size = 18),
 plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/NFKB1.png')
 
+ggbarplot(qPCR_summary, x = "Condition", "JNK1",
+       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "JNK1") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 2)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 16),
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/JNK1.png')
+
+ggbarplot(qPCR_summary, x = "Condition", "JNK2",
+       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "JNK2") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 2.5)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 16),
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/JNK2.png')
+
 ```
 
 
 ``` {R Stats}
 
-for (i in 5:ncol(qPCR_summary)) {
+for (i in 8:ncol(qPCR_summary)) {
    formula <- as.formula(paste(colnames(qPCR_summary)[i], " ~ Condition*Round", sep=""))
    model <- aov(formula, data = qPCR_summary)
 
