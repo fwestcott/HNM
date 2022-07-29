@@ -43,7 +43,7 @@ theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
 axis.title.y = element_text(color = "grey20", size = 18))
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/graphs/TAG.png')
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/TAG.png')
 
 ggbarplot(All_Data, x = "Condition", "Palmitate (mol %)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
@@ -53,7 +53,7 @@ theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
 axis.title.y = element_text(color = "grey20", size = 18))
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/graphs/Palmitate.png')
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Palmitate.png')
 
 ggbarplot(All_Data, x = "Condition", "Sterate (mol %)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
@@ -63,7 +63,7 @@ theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
 axis.title.y = element_text(color = "grey20", size = 18))
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/graphs/Sterate.png')
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Sterate.png')
 
 ggbarplot(All_Data, x = "Condition", "Oleate (mol %)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
@@ -73,7 +73,7 @@ theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
 axis.title.y = element_text(color = "grey20", size = 18))
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/graphs/Oleate.png')
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Oleate.png')
 
 ggbarplot(All_Data, x = "Condition", "Linoleate (mol %)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
@@ -83,7 +83,7 @@ theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
 axis.title.y = element_text(color = "grey20", size = 18))
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/graphs/Linoleate.png')
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Linoleate.png')
 
 ```
 
