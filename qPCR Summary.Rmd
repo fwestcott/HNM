@@ -20,13 +20,15 @@ qPCR_summary <- read_excel("HNM qPCR Summary.xlsx", sheet = 2)
 
 qPCR_summary$"Condition" <- factor(qPCR_summary$"Condition", levels = c("LPS Control",	"Low Insulin Control", "Low Insulin OPLA", "Low Insulin POLA", "High Insulin Control", "High Insulin OPLA", "High Insulin POLA"))
 
+qPCR_summary$"Round" <- factor(qPCR_summary$"Round", levels = c("1",	"2", "3"))
+
 ```
 
 
 ``` {r Graphs}
 
 ggbarplot(qPCR_summary, x = "Condition", "NFKB1",
-       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "NFKB1") +
+       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", shape = "Round", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "NFKB1") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
   scale_y_continuous(expand = c(0,0), limits=c(0, 2)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),
@@ -37,7 +39,7 @@ plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/NFKB1.png')
 
 ggbarplot(qPCR_summary, x = "Condition", "JNK1",
-       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "JNK1") +
+       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", shape = "Round", fill = "Condition", ylab = "Relative Expression", title = "JNK1") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
   scale_y_continuous(expand = c(0,0), limits=c(0, 2)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),
@@ -48,7 +50,7 @@ plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/JNK1.png')
 
 ggbarplot(qPCR_summary, x = "Condition", "JNK2",
-       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "JNK2") +
+       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", shape = "Round", fill = "Condition", ylab = "Relative Expression", title = "JNK2") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
   scale_y_continuous(expand = c(0,0), limits=c(0, 2.5)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),

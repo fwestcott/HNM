@@ -1,0 +1,89 @@
+---
+title: "HNM TAG Analysis"
+author: "Felix Westcott"
+date: "2022-07-29"
+output: html_document
+---
+
+```{r setup, include=MediaLSE}
+library(tidyverse)
+library(ggplot2)
+library(readxl)
+library(xlsx)
+library(dplyr)
+library(ggpubr)
+library(ggsci)
+library(rstatix)
+library (cowplot)
+
+All_Data <- read_excel("HNM TAG Analysis.xlsx", sheet = 2)
+
+All_Data$"Condition" <- factor(All_Data$"Condition", levels = c("Low Insulin Control", "Low Insulin OPLA", "Low Insulin POLA", "High Insulin Control", "High Insulin OPLA", "High Insulin POLA"))
+
+```
+
+``` {R}
+
+All_Data$TAG <- All_Data$`Intracellular TAG (umol/g of protein)`
+
+res.aov <- aov(TAG ~ Condition*Round, data = All_Data)
+
+summary(res.aov)
+
+```
+
+``` {R}
+
+ggbarplot(All_Data, x = "Condition", "Intracellular TAG (umol/g of protein)",
+    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Intracellular TAG
+(umol/g of protein)") +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 1000)) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 14), 
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/graphs/TAG.png')
+
+ggbarplot(All_Data, x = "Condition", "Palmitate (mol %)",
+    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 50)) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 14), 
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/graphs/Palmitate.png')
+
+ggbarplot(All_Data, x = "Condition", "Sterate (mol %)",
+    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 5)) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 14), 
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/graphs/Sterate.png')
+
+ggbarplot(All_Data, x = "Condition", "Oleate (mol %)",
+    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 100)) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 14), 
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/graphs/Oleate.png')
+
+ggbarplot(All_Data, x = "Condition", "Linoleate (mol %)",
+    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 15)) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 14), 
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/graphs/Linoleate.png')
+
+```
+
