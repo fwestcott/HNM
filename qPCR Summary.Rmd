@@ -28,7 +28,7 @@ qPCR_summary$"Round" <- factor(qPCR_summary$"Round", levels = c("1",	"2", "3"))
 ``` {r Graphs}
 
 ggbarplot(qPCR_summary, x = "Condition", "NFKB1",
-       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", shape = "Round", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "NFKB1") +
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "NFKB1") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
   scale_y_continuous(expand = c(0,0), limits=c(0, 2)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),
@@ -39,7 +39,7 @@ plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/NFKB1.png')
 
 ggbarplot(qPCR_summary, x = "Condition", "JNK1",
-       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", shape = "Round", fill = "Condition", ylab = "Relative Expression", title = "JNK1") +
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "JNK1") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
   scale_y_continuous(expand = c(0,0), limits=c(0, 2)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),
@@ -50,7 +50,7 @@ plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/JNK1.png')
 
 ggbarplot(qPCR_summary, x = "Condition", "JNK2",
-       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", shape = "Round", fill = "Condition", ylab = "Relative Expression", title = "JNK2") +
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "JNK2") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
   scale_y_continuous(expand = c(0,0), limits=c(0, 2.5)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),
@@ -62,7 +62,7 @@ ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/JNK2.p
 
 
 ggbarplot(qPCR_summary, x = "Condition", "CXCL8",
-       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", shape = "Round", fill = "Condition", ylab = "Relative Expression", title = "CXCL8") +
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "CXCL8") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
   scale_y_continuous(expand = c(0,0), limits=c(0, 4)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),
@@ -74,7 +74,7 @@ ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/CXCL8.
 
 
 ggbarplot(qPCR_summary, x = "Condition", "CASP3",
-       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", shape = "Round", fill = "Condition", ylab = "Relative Expression", title = "CASP3") +
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "CASP3") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
   scale_y_continuous(expand = c(0,0), limits=c(0, 1.5)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),
@@ -86,7 +86,7 @@ ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/CASP3.
 
 
 ggbarplot(qPCR_summary, x = "Condition", "HSPA5",
-       add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", shape = "Round", fill = "Condition", ylab = "Relative Expression", title = "HSPA5") +
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "HSPA5") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
   scale_y_continuous(expand = c(0,0), limits=c(0, 2.5)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),
@@ -95,6 +95,73 @@ axis.title.x = element_text(color = "grey20", size = 18),
 axis.title.y = element_text(color = "grey20", size = 18),
 plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/HSPA5.png')
+
+ggbarplot(qPCR_summary, x = "Condition", "IL1B",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "IL1B") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 15)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 16),
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/IL1B.png')
+
+ggbarplot(qPCR_summary, x = "Condition", "ATF4",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "ATF4") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 2)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 16),
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/ATF4.png')
+
+
+ggbarplot(qPCR_summary, x = "Condition", "ATF6",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "ATF6") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 2)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 16),
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/ATF6.png')
+
+ggbarplot(qPCR_summary, x = "Condition", "IL6",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "IL6") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 15)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 16),
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/IL6.png')
+
+ggbarplot(qPCR_summary, x = "Condition", "MTOR",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "MTOR") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 2)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 16),
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/MTOR.png')
+
+ggbarplot(qPCR_summary, x = "Condition", "ERN1",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Relative Expression", title = "ERN1") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 2)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 16),
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/ERN1.png')
 
 
 ```
@@ -105,7 +172,7 @@ ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/HSPA5.
 qPCR_summary$"Round" <- as.numeric(qPCR_summary$"Round")
 
 for (i in 8:ncol(qPCR_summary)) {
-   formula <- as.formula(paste(colnames(qPCR_summary)[i], " ~ Condition*Round", sep=""))
+   formula <- as.formula(paste(colnames(qPCR_summary)[i], " ~ Condition * Round", sep=""))
    model <- aov(formula, data = qPCR_summary)
 
    cat("\n-----\n\n")

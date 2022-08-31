@@ -24,15 +24,37 @@ All_Data$"Condition" <- factor(All_Data$"Condition", levels = c("Low Insulin Con
 
 ``` {R}
 
+All_Data$"Round" <- as.numeric(All_Data$"Round")
+
 All_Data$TAG <- All_Data$`Intracellular TAG (umol/g of protein)`
+All_Data$PA <- All_Data$`Palmitate (mol %)`
+All_Data$PAO <- All_Data$`Palmitoleate (mol %)`
+All_Data$OA <- All_Data$`Oleate (mol %)`
+All_Data$LA <- All_Data$`Linoleate (mol %)`
 
-res.aov <- aov(TAG ~ Condition*Round, data = All_Data)
+model <- aov(TAG ~ Condition, data = All_Data)
+results <- TukeyHSD(model)
+results_df <- as.tibble(results$Condition, rownames = "Condition")
+results_df <- separate(results_df, Condition, into = c("group 1", "group 2"), sep = "-", convert = TRUE)
 
-summary(res.aov)
+
+for (i in 15:ncol(All_Data)) {
+   formula <- as.formula(paste(colnames(All_Data)[i], " ~ Condition * Round ", sep=""))
+   model <- aov(formula, data = All_Data)
+
+   cat("\n-----\n\n")
+   cat(colnames(All_Data)[i])
+   cat("\n")
+   print(summary(model))
+}
 
 ```
 
 ``` {R}
+
+pairwise.test = All_Data %>% 
+  t_test(TAG ~ Condition)
+pairwise.test <- filter(pairwise.test, p.adj.signif != 'ns')
 
 ggbarplot(All_Data, x = "Condition", "Intracellular TAG (umol/g of protein)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Intracellular TAG
@@ -42,8 +64,13 @@ ggbarplot(All_Data, x = "Condition", "Intracellular TAG (umol/g of protein)",
 theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18))
+axis.title.y = element_text(color = "grey20", size = 18)) +
+  stat_pvalue_manual(pairwise.test, y.position = 900, step.increase = 0.1)
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/TAG.png')
+
+pairwise.test = All_Data %>% 
+  t_test(PA ~ Condition)
+pairwise.test <- filter(pairwise.test, p.adj.signif != 'ns')
 
 ggbarplot(All_Data, x = "Condition", "Palmitate (mol %)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
@@ -52,10 +79,11 @@ ggbarplot(All_Data, x = "Condition", "Palmitate (mol %)",
 theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18))
+axis.title.y = element_text(color = "grey20", size = 18))+
+  stat_pvalue_manual(pairwise.test, y.position = 35, step.increase = 0.1)
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Palmitate.png')
 
-ggbarplot(All_Data, x = "Condition", "Sterate (mol %)",
+ggbarplot(All_Data, x = "Condition", "Palmitoleate (mol %)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
   scale_y_continuous(expand = c(0,0), limits=c(0, 5)) +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
@@ -63,7 +91,11 @@ theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
 axis.title.y = element_text(color = "grey20", size = 18))
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Sterate.png')
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Palmitoleate.png')
+
+pairwise.test = All_Data %>% 
+  t_test(OA ~ Condition)
+pairwise.test <- filter(pairwise.test, p.adj.signif != 'ns')
 
 ggbarplot(All_Data, x = "Condition", "Oleate (mol %)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
@@ -72,8 +104,13 @@ ggbarplot(All_Data, x = "Condition", "Oleate (mol %)",
 theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18))
+axis.title.y = element_text(color = "grey20", size = 18)) +
+  stat_pvalue_manual(pairwise.test, y.position = 70, step.increase = 0.1)
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Oleate.png')
+
+pairwise.test = All_Data %>% 
+  t_test(LA ~ Condition)
+pairwise.test <- filter(pairwise.test, p.adj.signif != 'ns')
 
 ggbarplot(All_Data, x = "Condition", "Linoleate (mol %)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
@@ -82,7 +119,8 @@ ggbarplot(All_Data, x = "Condition", "Linoleate (mol %)",
 theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18))
+axis.title.y = element_text(color = "grey20", size = 18)) +
+  stat_pvalue_manual(pairwise.test, y.position = 10.5, step.increase = 0.1)
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Linoleate.png')
 
 ```
