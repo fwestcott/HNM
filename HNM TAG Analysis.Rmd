@@ -32,11 +32,6 @@ All_Data$PAO <- All_Data$`Palmitoleate (mol %)`
 All_Data$OA <- All_Data$`Oleate (mol %)`
 All_Data$LA <- All_Data$`Linoleate (mol %)`
 
-model <- aov(TAG ~ Condition, data = All_Data)
-results <- TukeyHSD(model)
-results_df <- as.tibble(results$Condition, rownames = "Condition")
-results_df <- separate(results_df, Condition, into = c("group 1", "group 2"), sep = "-", convert = TRUE)
-
 
 for (i in 15:ncol(All_Data)) {
    formula <- as.formula(paste(colnames(All_Data)[i], " ~ Condition * Round ", sep=""))
@@ -47,6 +42,11 @@ for (i in 15:ncol(All_Data)) {
    cat("\n")
    print(summary(model))
 }
+
+results <- TukeyHSD(aov(TAG ~ Condition, data = All_Data))
+results_df <- as.tibble(results$Condition, rownames = "Condition")
+results_df <- separate(results_df, Condition, into = c("group1", "group2"), sep = "-", convert = TRUE)
+results_df$p_adj_signif <- if_else(results_df$`p adj` >= 0.05, "ns", if_else(results_df$`p adj` >= 0.01, "*", if_else(results_df$`p adj` >= 0.001, "**", "***")))
 
 ```
 
