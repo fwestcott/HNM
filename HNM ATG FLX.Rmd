@@ -1,0 +1,48 @@
+---
+title: "HNM ATG FLX"
+author: "Felix Westcott"
+date: "2022-09-06"
+output: html_document
+---
+
+```{r setup, include=MediaLSE}
+library(tidyverse)
+library(ggplot2)
+library(readxl)
+library(xlsx)
+library(dplyr)
+library(ggpubr)
+library(ggsci)
+library(rstatix)
+library (cowplot)
+
+All_Data <- read_excel("HNM ATG FLX Assay.xlsx", sheet = 2)
+
+All_Data$"Condition" <- factor(All_Data$"Condition", levels = c("LPS Control",	"Low Insulin Control", "Low Insulin OPLA", "Low Insulin POLA", "High Insulin Control", "High Insulin OPLA", "High Insulin POLA"))
+
+All_Data$"Round" <- as.numeric(All_Data$"Round", levels = c("1",	"2", "3"))
+
+```
+
+
+``` {R ATG FLX}
+
+aov.res <- aov(`Autophagic flux` ~ Insulin * FA_Type * FA_Amount * Round, data = All_Data)
+
+summary(aov.res)
+
+All_Data$"Round" <- factor(All_Data$"Round", levels = c("1",	"2", "3"))
+
+ggbarplot(All_Data, x = "Condition", "Autophagic flux",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Autophagic flux") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_y_continuous(expand = c(0,0), limits=c(-1, 10)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 16),
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/ATG FLX.png')
+
+```
+
