@@ -34,7 +34,7 @@ All_Data$LA <- All_Data$`Linoleate (mol %)`
 
 
 for (i in 15:ncol(All_Data)) {
-   formula <- as.formula(paste(colnames(All_Data)[i], " ~ Condition * Round ", sep=""))
+   formula <- as.formula(paste(colnames(All_Data)[i], " ~ FA_Amount * FA_Type * Insulin * Round ", sep=""))
    model <- aov(formula, data = All_Data)
 
    cat("\n-----\n\n")
@@ -54,7 +54,7 @@ results_df <- separate(
 results_df$p_adj_signif <- if_else(results_df$`p adj` >= 0.05, "ns", 
                                    if_else(results_df$`p adj` >= 0.01, "*", 
                                            if_else(results_df$`p adj` >= 0.001, "**", "***")))
-pairwise.test <- results_df[c(1,2,3,6,13,14,15),]
+pairwise.test <- results_df[c(1,2,13,14),]
 
 ggbarplot(All_Data, x = "Condition", "Intracellular TAG (umol/g of protein)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Intracellular TAG
@@ -65,7 +65,7 @@ theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
 axis.title.y = element_text(color = "grey20", size = 18)) +
-  stat_pvalue_manual(pairwise.test, label = "p_adj_signif", y.position = 900, step.increase = 0.15)
+  stat_pvalue_manual(pairwise.test, label = "p_adj_signif", y.position = 850, step.increase = 0.1)
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/TAG.png')
 
 results <- TukeyHSD(aov(PA ~ Condition, data = All_Data))
@@ -75,7 +75,7 @@ results_df <- separate(
 results_df$p_adj_signif <- if_else(results_df$`p adj` >= 0.05, "ns", 
                                    if_else(results_df$`p adj` >= 0.01, "*", 
                                            if_else(results_df$`p adj` >= 0.001, "**", "***")))
-pairwise.test <- results_df[c(2,6,14,15),]
+pairwise.test <- results_df[c(2,3,6,14,15),]
 
 ggbarplot(All_Data, x = "Condition", "Palmitate (mol %)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
