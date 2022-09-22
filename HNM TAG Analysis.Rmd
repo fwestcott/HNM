@@ -16,7 +16,7 @@ library(ggsci)
 library(rstatix)
 library (cowplot)
 
-All_Data <- read_excel("HNM TAG Analysis.xlsx", sheet = 2)
+All_Data <- read_excel("HNM TAG Analysis.xlsx", sheet = 1)
 
 All_Data$"Condition" <- factor(All_Data$"Condition", levels = c("Low Insulin Control", "Low Insulin OPLA", "Low Insulin POLA", "High Insulin Control", "High Insulin OPLA", "High Insulin POLA"))
 
@@ -59,13 +59,13 @@ pairwise.test <- results_df[c(1,2,13,14),]
 ggbarplot(All_Data, x = "Condition", "Intracellular TAG (umol/g of protein)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Intracellular TAG
 (umol/g of protein)") +
-  scale_y_continuous(expand = c(0,0), limits=c(0, 1500)) +
+  scale_y_continuous(expand = c(0,0), limits=c(0, 2500)) +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
 axis.title.y = element_text(color = "grey20", size = 18)) +
-  stat_pvalue_manual(pairwise.test, label = "p_adj_signif", y.position = 850, step.increase = 0.1)
+  stat_pvalue_manual(pairwise.test, label = "p_adj_signif", y.position = 1800, step.increase = 0.1)
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/TAG.png')
 
 results <- TukeyHSD(aov(PA ~ Condition, data = All_Data))
