@@ -26,9 +26,7 @@ All_Data$"Condition" <- factor(All_Data$"Condition", levels = c("LPS Control", "
 
 All_Data$"Round" <- as.numeric(All_Data$"Round")
 
-All_Data$UCK18 <- All_Data$`Uncorrected CK-18 fragments (ng/mL)`
 All_Data$CK18 <- All_Data$`CK-18 fragments (ng/mg of protein)`
-All_Data$UIL8 <- All_Data$`Uncorrected IL-8 (pg/mL)`
 All_Data$IL8 <- All_Data$`IL-8 (pg/mg of protein)`
 
 
@@ -44,21 +42,13 @@ for (i in 13:ncol(All_Data)) {
 }
 
 ```
+
 ``` {R, graphing}
 
-ggbarplot(filter(All_Data, All_Data$Condition!= "LPS Control"), x = "Condition", "Uncorrected CK-18 fragments (ng/mL)",
-    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
-  scale_y_continuous(expand = c(0,0), limits=c(0, 12)) +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
-theme(axis.text.x = element_text(color = "grey20", size = 12),
-axis.text.y = element_text(color = "grey20", size = 14), 
-axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18))
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/UCK18.png')
 
-ggbarplot(filter(All_Data, All_Data$Condition!= "LPS Control"), x = "Condition", "CK-18 fragments (ng/mg of protein)",
+ggbarplot(All_Data, x = "Condition", "CK-18 fragments (ng/mg of protein)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
-  scale_y_continuous(expand = c(0,0), limits=c(0, 4)) +
+  scale_y_continuous(expand = c(0,0), limits=c(0,4)) +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
@@ -66,17 +56,8 @@ axis.title.x = element_text(color = "grey20", size = 18),
 axis.title.y = element_text(color = "grey20", size = 18))
 ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/CK18.png')
 
-ggbarplot(All_Data, x = "Condition", "Uncorrected IL-8 (pg/mL)",
-    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
-  scale_y_continuous(expand = c(0,0), limits=c(0, 1200)) +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
-theme(axis.text.x = element_text(color = "grey20", size = 12),
-axis.text.y = element_text(color = "grey20", size = 14), 
-axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18))
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/UIL8.png')
 
-ggbarplot(filter(All_Data, All_Data$Condition!= "LPS Control"), x = "Condition", "IL-8 (pg/mg of protein)",
+ggbarplot(All_Data, x = "Condition", "IL-8 (pg/mg of protein)",
     add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
   scale_y_continuous(expand = c(0,0), limits=c(0, 500)) +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
