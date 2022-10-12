@@ -7,6 +7,7 @@ output: html_document
 
 
 ```{r setup, include=MediaLSE}
+
 library(tidyverse)
 library(ggplot2)
 library(readxl)
@@ -22,17 +23,18 @@ All_Data <- read_excel("HNM ELISA Analysis.xlsx", sheet = 1)
 All_Data$"Condition" <- factor(All_Data$"Condition", levels = c("LPS Control", "Low Insulin Control", "Low Insulin OPLA", "Low Insulin POLA", "High Insulin Control", "High Insulin OPLA", "High Insulin POLA"))
 
 ```
+
 ``` {R}
 
 All_Data$"Round" <- as.numeric(All_Data$"Round")
 
 All_Data$CK18 <- All_Data$`CK-18 fragments (ng/mg of protein)`
 All_Data$IL8 <- All_Data$`IL-8 (pg/mg of protein)`
+All_Data$IL1B <- All_Data$`IL-1B (pg/mg of protein)`
 
 
-
-for (i in 13:ncol(All_Data)) {
-   formula <- as.formula(paste(colnames(All_Data)[i], " ~ Condition * Round ", sep=""))
+for (i in 15:ncol(All_Data)) {
+   formula <- as.formula(paste(colnames(All_Data)[i], " ~ FA_Amount * FA_Type * Insulin * Round", sep=""))
    model <- aov(formula, data = All_Data)
 
    cat("\n-----\n\n")
@@ -47,26 +49,39 @@ for (i in 13:ncol(All_Data)) {
 
 
 ggbarplot(All_Data, x = "Condition", "CK-18 fragments (ng/mg of protein)",
-    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
+    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", title = "CK-18 Fragments in Media") +
   scale_y_continuous(expand = c(0,0), limits=c(0,4)) +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18))
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/CK18.png')
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/CK18 ELISA.png')
 
 
 ggbarplot(All_Data, x = "Condition", "IL-8 (pg/mg of protein)",
-    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
+    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", title = "IL-8 in Media") +
   scale_y_continuous(expand = c(0,0), limits=c(0, 500)) +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
 theme(axis.text.x = element_text(color = "grey20", size = 12),
 axis.text.y = element_text(color = "grey20", size = 14), 
 axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18))
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/IL8.png')
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/IL8 ELISA.png')
+
+ggbarplot(All_Data, x = "Condition", "IL-1B (pg/mg of protein)",
+    add = c("mean_se"), error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylims = c(0,100), title = "IL-1B in Media") +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+theme(axis.text.x = element_text(color = "grey20", size = 12),
+axis.text.y = element_text(color = "grey20", size = 14), 
+axis.title.x = element_text(color = "grey20", size = 18),
+axis.title.y = element_text(color = "grey20", size = 18),
+plot.title = element_text(color = "grey20", size = 22, face = "bold", hjust = 0.5))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/IL8 ELISA.png')
+
 
 ```
-
 
