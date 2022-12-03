@@ -15,6 +15,7 @@ library(ggpubr)
 library(ggsci)
 library(rstatix)
 library (cowplot)
+library (ggprism)
 
 All_Data <- read_excel("HNM TAG Analysis.xlsx", sheet = 1)
 
@@ -26,15 +27,8 @@ All_Data$"Condition" <- factor(All_Data$"Condition", levels = c("Low Insulin Con
 
 All_Data$"Round" <- as.numeric(All_Data$"Round")
 
-All_Data$TAG <- All_Data$`Intracellular TAG (umol/g of protein)`
-All_Data$PA <- All_Data$`Palmitate (mol %)`
-All_Data$PAO <- All_Data$`Palmitoleate (mol %)`
-All_Data$OA <- All_Data$`Oleate (mol %)`
-All_Data$LA <- All_Data$`Linoleate (mol %)`
-
-
-for (i in 15:ncol(All_Data)) {
-   formula <- as.formula(paste(colnames(All_Data)[i], " ~ FA_Amount * FA_Type * Insulin * Round ", sep=""))
+for (i in 10:ncol(All_Data)) {
+   formula <- as.formula(paste(colnames(All_Data)[i], " ~ Condition * Round ", sep=""))
    model <- aov(formula, data = All_Data)
 
    cat("\n-----\n\n")
@@ -44,99 +38,73 @@ for (i in 15:ncol(All_Data)) {
 }
 
 ```
+```{R}
 
-``` {R}
+pairwise.test = All_Data %>% 
+  t_test(TAG ~ Condition) %>%
+  add_xy_position(x = "Condition")
+pairwise.test <- filter(pairwise.test, p.adj.signif != "ns")
 
-results <- TukeyHSD(aov(TAG ~ Condition, data = All_Data))
-results_df <- separate(
-  as.tibble(results$Condition, rownames = "Condition"), 
-  Condition, into = c("group1", "group2"), sep = "-", convert = TRUE)
-results_df$p_adj_signif <- if_else(results_df$`p adj` >= 0.05, "ns", 
-                                   if_else(results_df$`p adj` >= 0.01, "*", 
-                                           if_else(results_df$`p adj` >= 0.001, "**", "***")))
-pairwise.test <- results_df[c(1,2,13,14),]
-
-ggbarplot(All_Data, x = "Condition", "Intracellular TAG (umol/g of protein)",
-    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylab = "Intracellular TAG
+ggbarplot(All_Data, "Condition", "TAG",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", fill = "Condition", xlab = " ", ylab = "Intracellular TG
 (umol/g of protein)") +
-  scale_y_continuous(expand = c(0,0), limits=c(0, 2500)) +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
-theme(axis.text.x = element_text(color = "grey20", size = 12),
-axis.text.y = element_text(color = "grey20", size = 14), 
-axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18)) +
-  stat_pvalue_manual(pairwise.test, label = "p_adj_signif", y.position = 1800, step.increase = 0.1)
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/TAG.png')
+   theme_prism(base_size = 14) +
+  theme(legend.position = "none") +
+      scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+   scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+  stat_pvalue_manual(pairwise.test, label = "p.adj.signif", bracket.size = 0.5)
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Outputs/Transfer-report/Figures/HNM TG.png')
 
-results <- TukeyHSD(aov(PA ~ Condition, data = All_Data))
-results_df <- separate(
-  as.tibble(results$Condition, rownames = "Condition"), 
-  Condition, into = c("group1", "group2"), sep = "-", convert = TRUE)
-results_df$p_adj_signif <- if_else(results_df$`p adj` >= 0.05, "ns", 
-                                   if_else(results_df$`p adj` >= 0.01, "*", 
-                                           if_else(results_df$`p adj` >= 0.001, "**", "***")))
-pairwise.test <- results_df[c(2,3,6,14,15),]
-
-ggbarplot(All_Data, x = "Condition", "Palmitate (mol %)",
-    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
-  scale_y_continuous(expand = c(0,0), limits=c(0, 50)) +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
-theme(axis.text.x = element_text(color = "grey20", size = 12),
-axis.text.y = element_text(color = "grey20", size = 14), 
-axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18))+
-  stat_pvalue_manual(pairwise.test, label = "p_adj_signif", y.position = 35, step.increase = 0.15)
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Palmitate.png')
-
-ggbarplot(All_Data, x = "Condition", "Palmitoleate (mol %)",
-    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
-  scale_y_continuous(expand = c(0,0), limits=c(0, 5)) +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
-theme(axis.text.x = element_text(color = "grey20", size = 12),
-axis.text.y = element_text(color = "grey20", size = 14), 
-axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18))
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Palmitoleate.png')
-
-results <- TukeyHSD(aov(OA ~ Condition, data = All_Data))
-results_df <- separate(
-  as.tibble(results$Condition, rownames = "Condition"), 
-  Condition, into = c("group1", "group2"), sep = "-", convert = TRUE)
-results_df$p_adj_signif <- if_else(results_df$`p adj` >= 0.05, "ns", 
-                                   if_else(results_df$`p adj` >= 0.01, "*", 
-                                           if_else(results_df$`p adj` >= 0.001, "**", "***")))
-pairwise.test <- results_df[c(2,6,14,15),]
-
-ggbarplot(All_Data, x = "Condition", "Oleate (mol %)",
-    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
-  scale_y_continuous(expand = c(0,0), limits=c(0, 100)) +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
-theme(axis.text.x = element_text(color = "grey20", size = 12),
-axis.text.y = element_text(color = "grey20", size = 14), 
-axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18)) +
-  stat_pvalue_manual(pairwise.test, label = "p_adj_signif", y.position = 75, step.increase = 0.4)
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Oleate.png')
-
-results <- TukeyHSD(aov(LA ~ Condition, data = All_Data))
-results_df <- separate(
-  as.tibble(results$Condition, rownames = "Condition"), 
-  Condition, into = c("group1", "group2"), sep = "-", convert = TRUE)
-results_df$p_adj_signif <- if_else(results_df$`p adj` >= 0.05, "ns", 
-                                   if_else(results_df$`p adj` >= 0.01, "*", 
-                                           if_else(results_df$`p adj` >= 0.001, "**", "***")))
-pairwise.test <- results_df[c(2,6,14,15),]
-
-ggbarplot(All_Data, x = "Condition", "Linoleate (mol %)",
-    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition") +
-  scale_y_continuous(expand = c(0,0), limits=c(0, 15)) +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
-theme(axis.text.x = element_text(color = "grey20", size = 12),
-axis.text.y = element_text(color = "grey20", size = 14), 
-axis.title.x = element_text(color = "grey20", size = 18),
-axis.title.y = element_text(color = "grey20", size = 18)) +
-  stat_pvalue_manual(pairwise.test, label = "p_adj_signif", y.position = 12, step.increase = 0.1)
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/Linoleate.png')
 
 ```
 
+
+``` {R}
+
+pairwise.test = All_Data %>% 
+  t_test(Oleate ~ Condition) %>%
+  add_xy_position(x = "Condition")
+pairwise.test <- filter(pairwise.test, p.adj.signif != "ns")
+pairwise.test <- pairwise.test[c(1,5,6),]
+
+ggbarplot(All_Data, "Condition", "Oleate",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", fill = "Condition", xlab = " ", ylab = "Oleate (mol%)") +
+   theme_prism(base_size = 14) +
+  theme(legend.position = "none") +
+      scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+   scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+  stat_pvalue_manual(pairwise.test, label = "p.adj.signif", bracket.size = 0.5, step.increase = 0.15)
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Outputs/Transfer-report/Figures/HNM Oleate.png')
+
+pairwise.test = All_Data %>% 
+  t_test(Palmitate ~ Condition) %>%
+  add_xy_position(x = "Condition")
+pairwise.test <- filter(pairwise.test, p.adj.signif != "ns")
+pairwise.test <- pairwise.test[c(1,3,7,8),]
+
+ggbarplot(All_Data, "Condition", "Palmitate",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", fill = "Condition", xlab = " ", ylab = "Palmitate (mol%)") +
+   theme_prism(base_size = 14) +
+  theme(legend.position = "none") +
+      scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+   scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+  stat_pvalue_manual(pairwise.test, label = "p.adj.signif", bracket.size = 0.5, step.increase = 0.15)
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Outputs/Transfer-report/Figures/HNM Palmitate.png')
+
+pairwise.test = All_Data %>% 
+  t_test(Linoleate ~ Condition) %>%
+  add_xy_position(x = "Condition")
+pairwise.test <- filter(pairwise.test, p.adj.signif != "ns")
+pairwise.test <- pairwise.test[c(1,5,6,7),]
+
+ggbarplot(All_Data, "Condition", "Linoleate",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", fill = "Condition", xlab = " ", ylab = "Linoleate (mol%)") +
+   theme_prism(base_size = 14) +
+  theme(legend.position = "none") +
+      scale_y_continuous(expand = expansion(mult = c(0, 0.15))) +
+   scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+  stat_pvalue_manual(pairwise.test, label = "p.adj.signif", bracket.size = 0.5, step.increase = 0.15)
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Outputs/Transfer-report/Figures/HNM Linoleate.png')
+
+
+```
