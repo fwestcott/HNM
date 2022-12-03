@@ -15,12 +15,15 @@ library(ggpubr)
 library(ggsci)
 library(rstatix)
 library (cowplot)
+library (ggprism)
 
 qPCR_summary <- read_excel("HNM qPCR Summary.xlsx", sheet = 2)
 
 qPCR_summary$"Condition" <- factor(qPCR_summary$"Condition", levels = c("LPS Control",	"Low Insulin Control", "Low Insulin OPLA", "Low Insulin POLA", "High Insulin Control", "High Insulin OPLA", "High Insulin POLA"))
 
-qPCR_summary$"Round" <- as.numeric(qPCR_summary$"Round", levels = c("1",	"2", "3"))
+qPCR_summary$"Round" <- as.numeric(qPCR_summary$"Round", levels = c("1", "2", "3"))
+
+qPCR_summary <- filter(qPCR_summary, Condition != "LPS Control")
 
 ```
 
@@ -44,6 +47,29 @@ for (i in 9:ncol(qPCR_summary)) {
 }
 
 ```
+``` {R}
+
+ggbarplot(qPCR_summary, x = "Condition", "CASP3",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", xlab = " ", ylab = "Relative Expression") +
+   theme_prism(base_size = 14) +
+  theme(legend.position = "none") +
+    scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
+      scale_y_continuous(expand = expansion(mult = c(0, 0.1)))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Outputs/Transfer-report/Figures/HNM CASP3.png')
+
+qPCR_summary_Tidy <- pivot_longer(qPCR_summary[,c(2,14,16,17,20)], !Condition, names_to = "Gene", values_to = "Relative Expression")
+
+ggbarplot(qPCR_summary_Tidy, x = "Gene", y = "Relative Expression",
+       add = "mean_se", error.plot = "upper_errorbar", palette = "npg", fill = "Condition", legend.title = "Condition", xlab = "Gene", ylab = "Relative Expression",  position = position_dodge(0.7)) +
+   theme_prism(base_size = 14) +
+  theme(legend.position = "right", legend.title = element_text()) +
+   scale_y_continuous(expand = expansion(mult = c(0, 0.15)))
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Outputs/Transfer-report/Figures/HNM ER Stress genes.png')
+
+
+
+```
+
 
 ``` {r Graphs}
 
