@@ -23,6 +23,8 @@ All_Data <- read_excel("HNM ELISA Analysis.xlsx", sheet = 1)
 
 All_Data$"Condition" <- factor(All_Data$"Condition", levels = c("LPS Control", "Low Insulin Control", "Low Insulin OPLA", "Low Insulin POLA", "High Insulin Control", "High Insulin OPLA", "High Insulin POLA"))
 
+All_Data <- filter(All_Data, Condition != "LPS Control")
+
 ```
 
 ``` {R}
@@ -35,7 +37,7 @@ All_Data$IL1B <- All_Data$`IL-1B (pg/mg of protein)`
 
 
 for (i in 15:ncol(All_Data)) {
-   formula <- as.formula(paste(colnames(All_Data)[i], " ~ FA_Amount * FA_Type * Insulin * Round", sep=""))
+   formula <- as.formula(paste(colnames(All_Data)[i], " ~ Condition", sep=""))
    model <- aov(formula, data = All_Data)
 
    cat("\n-----\n\n")
@@ -48,31 +50,30 @@ for (i in 15:ncol(All_Data)) {
 
 ``` {R, graphing}
 
-
 ggbarplot(All_Data, x = "Condition", "CK-18 fragments (ng/mg of protein)",
-    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", title = "CK-18 Fragments in Media") +
+    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", xlab = " ") +
   scale_y_continuous(expand = c(0,0), limits=c(0,4)) +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
    theme_prism(base_size = 14) +
   theme(legend.position = "none") 
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/CK18 ELISA.png')
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Outputs/Transfer-report/Figures/HNM CK-18.png')
 
 
 ggbarplot(All_Data, x = "Condition", "IL-8 (pg/mg of protein)",
-    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", title = "IL-8 in Media") +
+    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", xlab = " ") +
   scale_y_continuous(expand = c(0,0), limits=c(0, 500)) +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
    theme_prism(base_size = 14) +
   theme(legend.position = "none") 
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/IL8 ELISA.png')
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Outputs/Transfer-report/Figures/HNM IL-8.png')
 
 ggbarplot(All_Data, x = "Condition", "IL-1B (pg/mg of protein)",
-    add = c("mean_se", "jitter"), error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", ylims = c(0,100), title = "IL-1B in Media") +
+    add = "mean_se", error.plot = "upper_errorbar", palette = "npg", legend = "none", fill = "Condition", xlab = " ", ylims = c(0,100)) +
   scale_y_continuous(expand = c(0,0)) +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 12)) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
    theme_prism(base_size = 14) +
   theme(legend.position = "none") 
-ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Results/HNM/Graphs/IL1B ELISA.png')
+ggsave('C:/Users/fwestcott/OneDrive - Nexus365/Desktop/Outputs/Transfer-report/Figures/HNM IL-1B.png')
 
 
 ```
